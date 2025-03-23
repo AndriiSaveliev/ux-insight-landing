@@ -16,7 +16,7 @@ export default function App() {
         setError("");
 
         try {
-            const response = await fetch("/api/insights", {
+            const response = await fetch("https://ux-insight-landing-production.up.railway.app/api/insights", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
