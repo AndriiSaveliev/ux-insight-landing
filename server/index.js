@@ -19,9 +19,10 @@ app.use(cors({
         "https://ux-insight-landing-git-main-andriisavelievs-projects.vercel.app",
         "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
     ],
-    methods: ["POST"],
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"]
 }));
+
 
 app.use(express.json());
 
