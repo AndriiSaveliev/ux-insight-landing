@@ -20,11 +20,15 @@ app.use(cors({
         "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
     ],
     methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"]
+    allowedHeaders: ["Content-Type"],
+    credentials: true
+
 }));
 
 
 app.use(express.json());
+
+app.options("/api/insights", cors());
 
 app.post("/api/insights", async (req, res) => {
     try {
