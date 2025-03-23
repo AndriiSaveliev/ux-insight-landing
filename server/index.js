@@ -13,14 +13,13 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ✅ Дозволити запити з Vercel
 const allowedOrigins = [
     "https://ux-insight-landing.vercel.app",
     "https://ux-insight-landing-git-main-andriisavelievs-projects.vercel.app",
     "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
 ];
 
-app.use(cors({
+const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
             callback(null, true);
@@ -31,12 +30,11 @@ app.use(cors({
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
     credentials: true
-}));
+};
 
-app.use(express.json());
+app.use(cors(corsOptions));
+app.options("/api/insights", cors(corsOptions));
 
-// ✅ Відповісти на preflight запити
-app.options("/api/insights", cors());
 
 app.post("/api/insights", async (req, res) => {
     try {
