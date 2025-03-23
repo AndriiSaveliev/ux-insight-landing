@@ -13,7 +13,16 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "https://ux-insight-landing.vercel.app",
+        "https://ux-insight-landing-git-main-andriisavelievs-projects.vercel.app",
+        "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
+    ],
+    methods: ["POST"],
+    allowedHeaders: ["Content-Type"]
+}));
+
 app.use(express.json());
 
 app.post("/api/insights", async (req, res) => {
