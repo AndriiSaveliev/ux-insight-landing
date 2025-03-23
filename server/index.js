@@ -13,21 +13,29 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
+// ✅ Дозволити запити з Vercel
+const allowedOrigins = [
+    "https://ux-insight-landing.vercel.app",
+    "https://ux-insight-landing-git-main-andriisavelievs-projects.vercel.app",
+    "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
+];
+
 app.use(cors({
-    origin: [
-        "https://ux-insight-landing.vercel.app",
-        "https://ux-insight-landing-git-main-andriisavelievs-projects.vercel.app",
-        "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
-    ],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
     credentials: true
-
 }));
-
 
 app.use(express.json());
 
+// ✅ Відповісти на preflight запити
 app.options("/api/insights", cors());
 
 app.post("/api/insights", async (req, res) => {
@@ -37,7 +45,7 @@ app.post("/api/insights", async (req, res) => {
 ✅ Make your CTA button more visible.
 ✅ Add testimonials near the form.
 ✅ Simplify the email input experience.
-            `;
+      `;
             return res.status(200).json({ insights: mockInsights });
         }
 
@@ -46,9 +54,9 @@ app.post("/api/insights", async (req, res) => {
             messages: [
                 {
                     role: "user",
-                    content: "Act as a UX expert. Give 3 improvements for a landing page asking for emails.",
-                },
-            ],
+                    content: "Act as a UX expert. Give 3 improvements for a landing page asking for emails."
+                }
+            ]
         });
 
         const result = completion.choices[0].message.content;
