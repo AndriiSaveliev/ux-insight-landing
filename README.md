@@ -19,7 +19,7 @@ A simple and elegant React + Tailwind landing page that uses OpenAI's GPT model 
 
 ## 📸 Demo
 
-> [🌐 Live Demo](https://your-vercel-url.vercel.app)  
+> [🌐 Live Demo](https://ux-insight-landing.vercel.app)  
 > Backend powered by: `Express + OpenAI SDK`
 
 ---
