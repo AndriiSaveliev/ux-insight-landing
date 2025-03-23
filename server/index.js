@@ -1,7 +1,7 @@
 import express from "express";
+import cors from "cors";
 import dotenv from "dotenv";
 import OpenAI from "openai";
-import cors from "cors";
 
 dotenv.config();
 
@@ -9,32 +9,18 @@ const app = express();
 const port = process.env.PORT || 5001;
 const USE_MOCK = process.env.USE_MOCK === "true";
 
+app.use(express.json());
+
+// ✅ Просте CORS рішення
+app.use(cors({
+    origin: "*", // або конкретно твій фронт: "https://ux-insight-landing.vercel.app"
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+}));
+
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
-
-const allowedOrigins = [
-    "https://ux-insight-landing.vercel.app",
-    "https://ux-insight-landing-git-main-andriisavelievs-projects.vercel.app",
-    "https://ux-insight-landing-fjr48yk7j-andriisavelievs-projects.vercel.app"
-];
-
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type"],
-    credentials: true
-};
-
-app.use(cors(corsOptions));
-app.options("/api/insights", cors(corsOptions));
-
 
 app.post("/api/insights", async (req, res) => {
     try {
@@ -52,9 +38,9 @@ app.post("/api/insights", async (req, res) => {
             messages: [
                 {
                     role: "user",
-                    content: "Act as a UX expert. Give 3 improvements for a landing page asking for emails."
-                }
-            ]
+                    content: "Act as a UX expert. Give 3 improvements for a landing page asking for emails.",
+                },
+            ],
         });
 
         const result = completion.choices[0].message.content;
